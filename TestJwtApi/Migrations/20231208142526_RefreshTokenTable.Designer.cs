@@ -9,11 +9,11 @@ using TestJwtApi.Models;
 
 #nullable disable
 
-namespace TestJwtApi.Migrations
+namespace JWTRefreshTokenInDotNet6.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231204094208_init")]
-    partial class init
+    [Migration("20231208142526_RefreshTokenTable")]
+    partial class RefreshTokenTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -281,6 +281,43 @@ namespace TestJwtApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TestJwtApi.Models.ApplicationUser", b =>
+                {
+                    b.OwnsMany("JWTRefreshTokenInDotNet6.Models.RefreshToken", "RefreshTokens", b1 =>
+                        {
+                            b1.Property<string>("ApplicationUserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
+
+                            b1.Property<DateTime>("CreatedOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime>("ExpiresOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("RevokedOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("Token")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ApplicationUserId", "Id");
+
+                            b1.ToTable("RefreshToken");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ApplicationUserId");
+                        });
+
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TestJwtApi.Migrations
+namespace JWTRefreshTokenInDotNet6.Migrations
 {
     public partial class init : Migration
     {
